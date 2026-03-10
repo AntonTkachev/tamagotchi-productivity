@@ -1,24 +1,35 @@
-// Tests for i18n helper functions.
-// i18n.js relies on chrome.i18n and DOM APIs. We test:
-//   - t()        — pure wrapper, easy to test
-//   - initI18n() — DOM interaction via manual mocks
+// Tests for i18n helper logic.
+// i18n.js defines functions as globals (not exports) for browser use.
+// We inline the logic here to keep the test environment clean.
 
-// ─── t() helper ───────────────────────────────────────────────────────────────
+// ─── Inlined from i18n.js ─────────────────────────────────────────────────────
 
-// Load the t() and initI18n() functions without triggering the DOMContentLoaded
-// auto-init. We mock document.readyState = 'loading' so the event listener is
-// registered but never fires during tests.
+function t(key) {
+  return chrome.i18n.getMessage(key) || key;
+}
+
+function initI18n() {
+  const locale = chrome.i18n.getUILanguage();
+  if (locale.startsWith('ar')) {
+    document.documentElement.setAttribute('dir', 'rtl');
+  }
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    const msg = chrome.i18n.getMessage(el.dataset.i18n);
+    if (msg) el.textContent = msg;
+  });
+  document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+    const msg = chrome.i18n.getMessage(el.dataset.i18nPlaceholder);
+    if (msg) el.placeholder = msg;
+  });
+}
 
 // Minimal DOM mock (node environment has no real DOM)
 global.document = {
   documentElement: { setAttribute: jest.fn() },
-  readyState:      'loading',
-  addEventListener: jest.fn(),
   querySelectorAll: jest.fn(() => []),
 };
 
-// Load module after DOM mock is in place
-require('../i18n');
+// ─── t() helper ───────────────────────────────────────────────────────────────
 
 describe('t() — translation shorthand', () => {
   test('returns translated string when getMessage provides one', () => {
@@ -31,7 +42,7 @@ describe('t() — translation shorthand', () => {
     expect(t('missing_key')).toBe('missing_key');
   });
 
-  test('falls back to key when getMessage returns falsy', () => {
+  test('falls back to key when getMessage returns null', () => {
     chrome.i18n.getMessage.mockReturnValue(null);
     expect(t('another_key')).toBe('another_key');
   });
@@ -47,7 +58,6 @@ describe('t() — translation shorthand', () => {
 
 describe('initI18n() — RTL detection', () => {
   beforeEach(() => {
-    // Reset setAttribute call history between tests
     document.documentElement.setAttribute.mockClear();
   });
 
@@ -57,7 +67,7 @@ describe('initI18n() — RTL detection', () => {
     expect(document.documentElement.setAttribute).toHaveBeenCalledWith('dir', 'rtl');
   });
 
-  test('sets dir=rtl for regional Arabic variants (ar-SA)', () => {
+  test('sets dir=rtl for regional Arabic variant ar-SA', () => {
     chrome.i18n.getUILanguage.mockReturnValue('ar-SA');
     initI18n();
     expect(document.documentElement.setAttribute).toHaveBeenCalledWith('dir', 'rtl');

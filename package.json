@@ -12,7 +12,7 @@
   },
   "jest": {
     "testEnvironment": "node",
-    "setupFiles": ["./jest.setup.js"],
+    "setupFilesAfterEnv": ["./jest.setup.js"],
     "testMatch": ["**/tests/**/*.test.js"]
   }
 }

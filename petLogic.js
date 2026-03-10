@@ -90,6 +90,23 @@ function computeStatUpdate(pet, settings, currentSite, siteTimestamp, now) {
   }
 
   const siteType = categorizeSite(currentSite, settings, siteTimestamp, now);
+  const ageDays  = (now - result.bornAt) / (1000 * 60 * 60 * 24);
+  result.age     = Math.floor(ageDays);
+
+  // Dead pets can only be revived by visiting a productive site
+  if (pet.isDead) {
+    if (siteType === 'productive') {
+      result.isDead    = false;
+      result.health    = 10;
+      result.happiness = 20;
+    } else {
+      result.isDead = true;
+    }
+    result.stage           = getStage(ageDays, result.health, result.isDead);
+    result.currentSiteType = siteType;
+    result.lastUpdated     = now;
+    return { pet: result, skipped: false };
+  }
 
   if (siteType === 'productive') {
     result.health          = Math.min(100, result.health + 2);
@@ -104,17 +121,8 @@ function computeStatUpdate(pet, settings, currentSite, siteTimestamp, now) {
     result.happiness = Math.min(100, result.happiness + 0.3);
   }
 
-  const ageDays = (now - result.bornAt) / (1000 * 60 * 60 * 24);
-  result.age    = Math.floor(ageDays);
   result.isDead = result.health <= 0;
   if (result.isDead) result.health = 0;
-
-  // Revive on productive site
-  if (result.isDead && siteType === 'productive') {
-    result.isDead    = false;
-    result.health    = 10;
-    result.happiness = 20;
-  }
 
   result.stage           = getStage(ageDays, result.health, result.isDead);
   result.currentSiteType = siteType;
