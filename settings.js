@@ -14,11 +14,12 @@ const DEFAULT_SETTINGS = {
 let settings = { productive: [], distracting: [] };
 
 async function load() {
-  const data = await chrome.storage.local.get(['settings', 'pet']);
+  const data = await chrome.storage.local.get(['settings', 'pet', 'devMode']);
   settings = data.settings || DEFAULT_SETTINGS;
   render('productive');
   render('distracting');
   renderPetInfo(data.pet);
+  if (data.devMode) initDevPanel(data.pet);
 }
 
 function render(type) {
@@ -105,5 +106,75 @@ document.addEventListener('click', e => {
 });
 
 document.getElementById('resetPetBtn').addEventListener('click', resetPet);
+
+// ─── Dev panel ────────────────────────────────────────────────────────────────
+
+function initDevPanel(pet) {
+  const panel = document.getElementById('devPanel');
+  panel.classList.add('visible');
+  if (!pet) return;
+
+  // Sync sliders to current pet state
+  const healthSlider    = document.getElementById('devHealth');
+  const happinessSlider = document.getElementById('devHappiness');
+  const ageInput        = document.getElementById('devAge');
+
+  healthSlider.value    = Math.round(pet.health    || 0);
+  happinessSlider.value = Math.round(pet.happiness || 0);
+  ageInput.value        = pet.age || 0;
+
+  document.getElementById('devHealthVal').textContent    = healthSlider.value;
+  document.getElementById('devHappinessVal').textContent = happinessSlider.value;
+
+  // Highlight active stage / site buttons
+  document.querySelectorAll('[data-stage]').forEach(btn => {
+    btn.classList.toggle('active', btn.dataset.stage === pet.stage);
+  });
+  document.querySelectorAll('[data-site]').forEach(btn => {
+    btn.classList.toggle('active', btn.dataset.site === pet.currentSiteType);
+  });
+
+  // Sliders
+  healthSlider.addEventListener('input', async () => {
+    document.getElementById('devHealthVal').textContent = healthSlider.value;
+    await patchPet({ health: Number(healthSlider.value) });
+  });
+  happinessSlider.addEventListener('input', async () => {
+    document.getElementById('devHappinessVal').textContent = happinessSlider.value;
+    await patchPet({ happiness: Number(happinessSlider.value) });
+  });
+
+  // Age
+  ageInput.addEventListener('change', async () => {
+    await patchPet({ age: Number(ageInput.value) });
+  });
+
+  // Stage buttons
+  document.querySelectorAll('[data-stage]').forEach(btn => {
+    btn.addEventListener('click', async () => {
+      document.querySelectorAll('[data-stage]').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      const isDead = btn.dataset.stage === 'dead';
+      await patchPet({ stage: btn.dataset.stage, isDead });
+    });
+  });
+
+  // Site type buttons
+  document.querySelectorAll('[data-site]').forEach(btn => {
+    btn.addEventListener('click', async () => {
+      document.querySelectorAll('[data-site]').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      await patchPet({ currentSiteType: btn.dataset.site });
+    });
+  });
+}
+
+async function patchPet(patch) {
+  const data = await chrome.storage.local.get('pet');
+  if (!data.pet) return;
+  const updated = { ...data.pet, ...patch };
+  await chrome.storage.local.set({ pet: updated });
+  renderPetInfo(updated);
+}
 
 load();

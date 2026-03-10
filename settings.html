@@ -126,6 +126,70 @@
       font-size: 12px;
     }
     .btn-danger:hover { background: #d63031; color: #fff; }
+
+    /* ── Dev panel ── */
+    .dev-panel {
+      display: none;
+      max-width: 620px;
+      margin-top: 36px;
+      border: 1px solid #fdcb6e44;
+      border-radius: 8px;
+      padding: 20px 24px;
+      background: #16213e;
+    }
+    .dev-panel.visible { display: block; }
+
+    .dev-title {
+      font-size: 11px;
+      letter-spacing: 3px;
+      color: #fdcb6e;
+      margin-bottom: 18px;
+      text-transform: uppercase;
+    }
+
+    .dev-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 14px;
+      font-size: 11px;
+      color: #888;
+    }
+    .dev-row label { width: 90px; flex-shrink: 0; }
+
+    .dev-btn-group { display: flex; gap: 6px; flex-wrap: wrap; }
+
+    .dev-btn {
+      background: none;
+      border: 1px solid #444;
+      color: #aaa;
+      padding: 4px 10px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-family: 'Courier New', monospace;
+      font-size: 11px;
+      transition: all 0.15s;
+    }
+    .dev-btn:hover        { border-color: #fdcb6e; color: #fdcb6e; }
+    .dev-btn.active       { border-color: #fdcb6e; color: #fdcb6e; background: #fdcb6e22; }
+    .dev-btn.site-prod    { border-color: #00b89488; }
+    .dev-btn.site-prod:hover, .dev-btn.site-prod.active  { border-color: #00b894; color: #00b894; background: #00b89422; }
+    .dev-btn.site-dist    { border-color: #ff767588; }
+    .dev-btn.site-dist:hover, .dev-btn.site-dist.active  { border-color: #ff7675; color: #ff7675; background: #ff767522; }
+
+    .dev-slider { flex: 1; accent-color: #fdcb6e; cursor: pointer; }
+    .dev-val { width: 28px; text-align: right; color: #fdcb6e; }
+
+    .dev-age-input {
+      width: 60px;
+      background: #1a1a2e;
+      border: 1px solid #444;
+      color: #eee;
+      padding: 4px 8px;
+      border-radius: 4px;
+      font-family: 'Courier New', monospace;
+      font-size: 11px;
+    }
   </style>
 </head>
 <body>
@@ -157,6 +221,48 @@
   <div class="section-title" data-i18n="pet_status">♦ PET STATUS</div>
   <div class="pet-info" id="petInfo">...</div>
   <button class="btn-danger" id="resetPetBtn" data-i18n="btn_reset">↺ reset pet (start over)</button>
+
+  <div class="dev-panel" id="devPanel">
+    <div class="dev-title">⚡ dev mode</div>
+
+    <div class="dev-row">
+      <label>Stage</label>
+      <div class="dev-btn-group">
+        <button class="dev-btn" data-stage="egg">egg</button>
+        <button class="dev-btn" data-stage="baby">baby</button>
+        <button class="dev-btn" data-stage="teen">teen</button>
+        <button class="dev-btn" data-stage="adult">adult</button>
+        <button class="dev-btn" data-stage="legend">legend</button>
+        <button class="dev-btn" data-stage="dead">dead</button>
+      </div>
+    </div>
+
+    <div class="dev-row">
+      <label>Health</label>
+      <input type="range" class="dev-slider" id="devHealth" min="0" max="100" value="80">
+      <span class="dev-val" id="devHealthVal">80</span>
+    </div>
+
+    <div class="dev-row">
+      <label>Happiness</label>
+      <input type="range" class="dev-slider" id="devHappiness" min="0" max="100" value="80">
+      <span class="dev-val" id="devHappinessVal">80</span>
+    </div>
+
+    <div class="dev-row">
+      <label>Age (days)</label>
+      <input type="number" class="dev-age-input" id="devAge" min="0" value="0">
+    </div>
+
+    <div class="dev-row">
+      <label>Site type</label>
+      <div class="dev-btn-group">
+        <button class="dev-btn site-prod" data-site="productive">productive</button>
+        <button class="dev-btn site-dist" data-site="distracting">distracting</button>
+        <button class="dev-btn" data-site="neutral">neutral</button>
+      </div>
+    </div>
+  </div>
 
   <script src="i18n.js"></script>
   <script src="settings.js"></script>
