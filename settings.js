@@ -19,7 +19,7 @@ async function load() {
   render('productive');
   render('distracting');
   renderPetInfo(data.pet);
-  if (data.devMode) initDevPanel(data.pet);
+  if (typeof DEV_MODE !== 'undefined' && DEV_MODE) initDevPanel(data.pet);
 }
 
 function render(type) {
