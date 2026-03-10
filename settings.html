@@ -127,6 +127,77 @@
     }
     .btn-danger:hover { background: #d63031; color: #fff; }
 
+    /* ── Change companion ── */
+    .change-section { max-width: 620px; margin-top: 32px; }
+
+    .companion-cards {
+      display: flex;
+      gap: 12px;
+      margin: 14px 0;
+      flex-wrap: wrap;
+    }
+
+    .companion-card {
+      width: 120px;
+      background: #16213e;
+      border: 2px solid #2d3436;
+      border-radius: 12px;
+      padding: 16px 10px 12px;
+      cursor: pointer;
+      text-align: center;
+      transition: border-color 0.2s, box-shadow 0.2s, transform 0.15s;
+    }
+    .companion-card:hover { transform: translateY(-2px); }
+    .companion-card.selected { box-shadow: 0 0 18px var(--glow); }
+
+    .companion-card[data-type="rabbit"] { --color: #a29bfe; --glow: rgba(162,155,254,0.4); }
+    .companion-card[data-type="cat"]    { --color: #fdcb6e; --glow: rgba(253,203,110,0.4); }
+    .companion-card[data-type="dog"]    { --color: #e17055; --glow: rgba(225,112,85,0.4);  }
+    .companion-card[data-type="parrot"] { --color: #00b894; --glow: rgba(0,184,148,0.4);   }
+
+    .companion-card:hover, .companion-card.selected { border-color: var(--color); }
+
+    .companion-card.current { border-color: var(--color); opacity: 0.5; cursor: default; }
+    .companion-card.current:hover { transform: none; }
+
+    .companion-emoji { font-size: 26px; margin-bottom: 8px; }
+    .companion-name  { font-size: 11px; letter-spacing: 2px; color: var(--color); font-weight: bold; }
+    .companion-trait { font-size: 10px; color: #555; margin-top: 4px; }
+
+    .change-meta {
+      font-size: 11px;
+      color: #636e72;
+      margin-bottom: 12px;
+    }
+    .change-meta .uses-left { color: #fdcb6e; font-weight: bold; }
+    .change-meta .uses-none { color: #d63031; }
+
+    .btn-change {
+      background: #0984e3;
+      color: #fff;
+      border: none;
+      padding: 7px 18px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-family: 'Courier New', monospace;
+      font-size: 12px;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.2s, background 0.15s;
+    }
+    .btn-change.visible { opacity: 1; pointer-events: all; }
+    .btn-change:hover   { background: #74b9ff; }
+    .btn-change:disabled { background: #2d3436; color: #555; cursor: default; }
+
+    .pro-hint {
+      display: none;
+      font-size: 11px;
+      color: #d63031;
+      margin-top: 10px;
+      letter-spacing: 1px;
+    }
+    .pro-hint.visible { display: block; }
+
     /* ── Dev panel ── */
     .dev-panel {
       display: none;
@@ -214,6 +285,37 @@
       </div>
       <ul class="site-list" id="distractingList"></ul>
     </div>
+  </div>
+
+  <hr class="divider">
+
+  <div class="change-section">
+    <div class="section-title">♻ CHANGE COMPANION</div>
+    <div class="change-meta" id="changeMeta"></div>
+    <div class="companion-cards" id="companionCards">
+      <div class="companion-card" data-type="rabbit">
+        <div class="companion-emoji">🐰</div>
+        <div class="companion-name">BUNNY</div>
+        <div class="companion-trait">curious & energetic</div>
+      </div>
+      <div class="companion-card" data-type="cat">
+        <div class="companion-emoji">🐱</div>
+        <div class="companion-name">KITTY</div>
+        <div class="companion-trait">independent & clever</div>
+      </div>
+      <div class="companion-card" data-type="dog">
+        <div class="companion-emoji">🐶</div>
+        <div class="companion-name">BUDDY</div>
+        <div class="companion-trait">loyal & enthusiastic</div>
+      </div>
+      <div class="companion-card" data-type="parrot">
+        <div class="companion-emoji">🦜</div>
+        <div class="companion-name">POLY</div>
+        <div class="companion-trait">creative & chatty</div>
+      </div>
+    </div>
+    <button class="btn-change" id="confirmChangeBtn">↺ switch companion</button>
+    <div class="pro-hint" id="proHint">✦ upgrade to Pro for unlimited changes</div>
   </div>
 
   <hr class="divider">

@@ -13,12 +13,15 @@ const DEFAULT_SETTINGS = {
 
 let settings = { productive: [], distracting: [] };
 
+const MAX_FREE_CHANGES = 3;
+
 async function load() {
-  const data = await chrome.storage.local.get(['settings', 'pet', 'devMode']);
+  const data = await chrome.storage.local.get(['settings', 'pet', 'petChangesUsed', 'devMode']);
   settings = data.settings || DEFAULT_SETTINGS;
   render('productive');
   render('distracting');
   renderPetInfo(data.pet);
+  initChangeCompanion(data.pet, data.petChangesUsed || 0);
   if (typeof DEV_MODE !== 'undefined' && DEV_MODE) initDevPanel(data.pet);
 }
 
@@ -108,6 +111,56 @@ document.addEventListener('click', e => {
 });
 
 document.getElementById('resetPetBtn').addEventListener('click', resetPet);
+
+// ─── Change companion ──────────────────────────────────────────────────────────
+
+function initChangeCompanion(pet, usedCount) {
+  const usesLeft   = MAX_FREE_CHANGES - usedCount;
+  const exhausted  = usesLeft <= 0;
+  const meta       = document.getElementById('changeMeta');
+  const confirmBtn = document.getElementById('confirmChangeBtn');
+  const proHint    = document.getElementById('proHint');
+
+  meta.innerHTML = exhausted
+    ? `<span class="uses-none">0 changes remaining</span>`
+    : `<span class="uses-left">${usesLeft}</span> free change${usesLeft !== 1 ? 's' : ''} remaining`;
+
+  if (exhausted) {
+    proHint.classList.add('visible');
+  }
+
+  // Mark current pet type
+  const currentType = pet && pet.petType;
+  document.querySelectorAll('.companion-card').forEach(card => {
+    card.classList.toggle('current', card.dataset.type === currentType);
+  });
+
+  let selectedType = null;
+
+  document.querySelectorAll('.companion-card').forEach(card => {
+    card.addEventListener('click', () => {
+      if (exhausted || card.dataset.type === currentType) return;
+      document.querySelectorAll('.companion-card').forEach(c => c.classList.remove('selected'));
+      card.classList.add('selected');
+      selectedType = card.dataset.type;
+      confirmBtn.classList.add('visible');
+    });
+  });
+
+  confirmBtn.addEventListener('click', async () => {
+    if (!selectedType || exhausted) return;
+    const data = await chrome.storage.local.get(['pet', 'petChangesUsed']);
+    if (!data.pet) return;
+    const updated = { ...data.pet, petType: selectedType };
+    await chrome.storage.local.set({
+      pet: updated,
+      petChangesUsed: (data.petChangesUsed || 0) + 1,
+    });
+    renderPetInfo(updated);
+    // Refresh the section to reflect new state
+    initChangeCompanion(updated, (data.petChangesUsed || 0) + 1);
+  });
+}
 
 // ─── Dev panel ────────────────────────────────────────────────────────────────
 
