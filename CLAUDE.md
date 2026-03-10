@@ -98,6 +98,7 @@ Four languages: `en`, `ru`, `es`, `ar`. Loaded by Chrome's built-in i18n system.
 - Tick fires every **5 minutes** via `chrome.alarms`
 - Absence > 8 hours → treated as sleep, no stat change
 - Health hits 0 → pet dies; visiting a productive site revives it with health=10
+- **Streak**: increments each day you had `focusMinutesToday > 0`; resets to 0 on missed days; `bestStreak` tracks all-time record and never decreases
 
 ### Stage progression
 
@@ -135,10 +136,10 @@ npm run test:cov   # with coverage report
 
 ### Test structure
 
-- **petLogic.test.js** — unit tests for all pure functions
+- **petLogic.test.js** — unit tests for all pure functions, including streak increment/reset/bestStreak
 - **background.test.js** — Chrome event handler wiring (onInstalled → opens onboarding tab, tick alarm, SITE_VISIT messages)
 - **popup.test.js** — `buildPalette(stage, petType)` animal palettes, dead override, sprite grid integrity
-- **onboarding.test.js** — pet object structure on creation, palette consistency
+- **onboarding.test.js** — pet object structure on creation (including streak/bestStreak), palette consistency
 - **i18n.test.js** — `t()` fallback behaviour, RTL detection in `initI18n()`
 
 ### Important: listener capture in background.test.js
@@ -167,3 +168,11 @@ npm run test:cov   # with coverage report
 **Add a new language** → create `_locales/<locale>/messages.json` with all keys from `en/messages.json` translated. If RTL, `i18n.js` handles `dir="rtl"` automatically for any locale starting with `ar`.
 
 **Add a new default site** → edit `DEFAULT_SETTINGS` in `petLogic.js` (single source of truth used by both background.js and settings.js).
+
+---
+
+## Dev mode
+
+Enable the dev panel in Settings by setting `DEV_MODE = true` in `dev-config.js`. The file is marked `assume-unchanged` in git so changes won't be committed.
+
+Dev panel controls: stage buttons, health/happiness sliders, age input, site type simulator.

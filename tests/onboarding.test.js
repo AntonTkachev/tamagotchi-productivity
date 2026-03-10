@@ -15,6 +15,8 @@ function createPetFromOnboarding(selectedType, now = Date.now()) {
     lastUpdated:       now,
     focusMinutesToday: 0,
     lastFocusDate:     new Date(now).toDateString(),
+    streak:            0,
+    bestStreak:        0,
     isDead:            false,
     currentSiteType:   'neutral',
   };
@@ -40,7 +42,7 @@ describe('onboarding pet creation', () => {
     const requiredFields = [
       'health', 'happiness', 'age', 'stage', 'petType',
       'bornAt', 'lastUpdated', 'focusMinutesToday', 'lastFocusDate',
-      'isDead', 'currentSiteType',
+      'streak', 'bestStreak', 'isDead', 'currentSiteType',
     ];
     requiredFields.forEach(field => {
       expect(pet).toHaveProperty(field);
@@ -58,6 +60,12 @@ describe('onboarding pet creation', () => {
     const pet = createPetFromOnboarding('dog');
     expect(pet.age).toBe(0);
     expect(pet.focusMinutesToday).toBe(0);
+  });
+
+  test('starts with streak 0 and bestStreak 0', () => {
+    const pet = createPetFromOnboarding('rabbit');
+    expect(pet.streak).toBe(0);
+    expect(pet.bestStreak).toBe(0);
   });
 
   test('currentSiteType is neutral on creation', () => {

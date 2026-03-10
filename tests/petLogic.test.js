@@ -204,6 +204,76 @@ describe('computeStatUpdate', () => {
     expect(updated.lastFocusDate).toBe(new Date(now).toDateString());
   });
 
+  // ─── Streak ───────────────────────────────────────────────────────────────
+
+  test('streak increments when previous day had focus minutes', () => {
+    const now = Date.now();
+    const yesterday = new Date(now - DAY).toDateString();
+    const pet = makePet({
+      streak: 2,
+      focusMinutesToday: 30,
+      lastFocusDate: yesterday,
+      lastUpdated: now - 5 * MIN,
+    });
+    const { pet: updated } = computeStatUpdate(pet, SETTINGS, 'github.com', now - MIN, now);
+    expect(updated.streak).toBe(3);
+  });
+
+  test('streak resets to 0 when previous day had no focus', () => {
+    const now = Date.now();
+    const yesterday = new Date(now - DAY).toDateString();
+    const pet = makePet({
+      streak: 5,
+      focusMinutesToday: 0,
+      lastFocusDate: yesterday,
+      lastUpdated: now - 5 * MIN,
+    });
+    const { pet: updated } = computeStatUpdate(pet, SETTINGS, 'github.com', now - MIN, now);
+    expect(updated.streak).toBe(0);
+  });
+
+  test('streak does not change within the same day', () => {
+    const now = Date.now();
+    const pet = makePet({
+      streak: 4,
+      focusMinutesToday: 60,
+      lastFocusDate: new Date(now).toDateString(),
+      lastUpdated: now - 5 * MIN,
+    });
+    const { pet: updated } = computeStatUpdate(pet, SETTINGS, 'github.com', now - MIN, now);
+    expect(updated.streak).toBe(4);
+  });
+
+  test('bestStreak updates when streak exceeds previous best', () => {
+    const now = Date.now();
+    const yesterday = new Date(now - DAY).toDateString();
+    const pet = makePet({
+      streak: 9,
+      bestStreak: 9,
+      focusMinutesToday: 30,
+      lastFocusDate: yesterday,
+      lastUpdated: now - 5 * MIN,
+    });
+    const { pet: updated } = computeStatUpdate(pet, SETTINGS, 'github.com', now - MIN, now);
+    expect(updated.streak).toBe(10);
+    expect(updated.bestStreak).toBe(10);
+  });
+
+  test('bestStreak does not decrease when streak resets', () => {
+    const now = Date.now();
+    const yesterday = new Date(now - DAY).toDateString();
+    const pet = makePet({
+      streak: 7,
+      bestStreak: 7,
+      focusMinutesToday: 0,
+      lastFocusDate: yesterday,
+      lastUpdated: now - 5 * MIN,
+    });
+    const { pet: updated } = computeStatUpdate(pet, SETTINGS, 'github.com', now - MIN, now);
+    expect(updated.streak).toBe(0);
+    expect(updated.bestStreak).toBe(7);
+  });
+
   test('updates age correctly', () => {
     const now     = Date.now();
     const bornAt  = now - 10 * DAY;
@@ -264,6 +334,8 @@ describe('createDefaultPet', () => {
     expect(pet.happiness).toBe(80);
     expect(pet.stage).toBe('egg');
     expect(pet.isDead).toBe(false);
+    expect(pet.streak).toBe(0);
+    expect(pet.bestStreak).toBe(0);
     expect(typeof pet.bornAt).toBe('number');
     expect(typeof pet.lastUpdated).toBe('number');
   });
