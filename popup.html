@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      width: 280px;
+      background: #1a1a2e;
+      color: #eee;
+      font-family: 'Courier New', monospace;
+      user-select: none;
+    }
+
+    .header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px 16px 6px;
+    }
+
+    .pet-name {
+      font-size: 17px;
+      font-weight: bold;
+      color: #74b9ff;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+    }
+
+    .settings-btn {
+      background: none;
+      border: 1px solid #333;
+      color: #636e72;
+      cursor: pointer;
+      padding: 4px 9px;
+      border-radius: 4px;
+      font-size: 14px;
+      transition: all 0.15s;
+    }
+    .settings-btn:hover { border-color: #74b9ff; color: #74b9ff; }
+
+    .stage-badge {
+      text-align: center;
+      font-size: 10px;
+      color: #a29bfe;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+
+    .canvas-container {
+      position: relative;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 12px;
+      background: #16213e;
+      margin: 0 14px;
+      border-radius: 14px;
+      border: 1px solid #0f3460;
+    }
+
+    canvas {
+      image-rendering: pixelated;
+      image-rendering: crisp-edges;
+    }
+
+    .dead-overlay {
+      display: none;
+      position: absolute;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.75);
+      border-radius: 14px;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .dead-overlay.visible { display: flex; }
+    .dead-title { color: #ff7675; font-size: 14px; font-weight: bold; }
+    .dead-hint { color: #aaa; font-size: 10px; text-align: center; padding: 0 12px; }
+
+    .mood {
+      text-align: center;
+      font-size: 12px;
+      color: #636e72;
+      margin: 8px 0 4px;
+      min-height: 18px;
+      font-style: italic;
+    }
+
+    .stats { padding: 4px 16px 8px; }
+
+    .stat {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 7px;
+    }
+
+    .stat-label {
+      font-size: 11px;
+      width: 82px;
+      color: #888;
+    }
+
+    .bar-wrap {
+      flex: 1;
+      height: 7px;
+      background: #2d3436;
+      border-radius: 4px;
+      overflow: hidden;
+    }
+
+    .bar-fill {
+      height: 100%;
+      border-radius: 4px;
+      transition: width 0.4s ease;
+    }
+
+    .health-fill   { background: linear-gradient(90deg, #e17055, #fd79a8); }
+    .happy-fill    { background: linear-gradient(90deg, #fdcb6e, #e17055); }
+
+    .stat-val {
+      font-size: 11px;
+      width: 26px;
+      text-align: right;
+      color: #74b9ff;
+    }
+
+    .info-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 7px 16px 13px;
+      font-size: 11px;
+      color: #636e72;
+      border-top: 1px solid #222;
+    }
+    .info-row strong { color: #a29bfe; }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <span class="pet-name">PIXEL</span>
+    <button class="settings-btn" id="settingsBtn">⚙</button>
+  </div>
+
+  <div class="stage-badge" id="stageBadge">● EGG ●</div>
+
+  <div class="canvas-container">
+    <canvas id="petCanvas" width="160" height="160"></canvas>
+    <div class="dead-overlay" id="deadOverlay">
+      <div class="dead-title">💀 your pet died</div>
+      <div class="dead-hint">visit a productive site to revive</div>
+    </div>
+  </div>
+
+  <div class="mood" id="mood">zzz...</div>
+
+  <div class="stats">
+    <div class="stat">
+      <span class="stat-label">❤ Health</span>
+      <div class="bar-wrap">
+        <div class="bar-fill health-fill" id="healthBar" style="width:80%"></div>
+      </div>
+      <span class="stat-val" id="healthVal">80</span>
+    </div>
+    <div class="stat">
+      <span class="stat-label">★ Happiness</span>
+      <div class="bar-wrap">
+        <div class="bar-fill happy-fill" id="happyBar" style="width:80%"></div>
+      </div>
+      <span class="stat-val" id="happyVal">80</span>
+    </div>
+  </div>
+
+  <div class="info-row">
+    <span>Age: <strong id="ageVal">0</strong> days</span>
+    <span>Focus: <strong id="focusVal">0</strong> min today</span>
+  </div>
+
+  <script src="popup.js"></script>
+</body>
+</html>

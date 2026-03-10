@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Settings — Productivity Tamagotchi</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      background: #1a1a2e;
+      color: #eee;
+      font-family: 'Courier New', monospace;
+      min-height: 100vh;
+      padding: 36px 40px;
+    }
+
+    h1 {
+      color: #74b9ff;
+      font-size: 20px;
+      letter-spacing: 3px;
+      margin-bottom: 6px;
+    }
+    .subtitle { color: #636e72; font-size: 12px; margin-bottom: 36px; }
+
+    .columns {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 28px;
+      max-width: 620px;
+    }
+
+    .col-title {
+      font-size: 12px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      margin-bottom: 14px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid #2d3436;
+    }
+    .col-productive  .col-title { color: #00b894; }
+    .col-distracting .col-title { color: #ff7675; }
+
+    .add-row { display: flex; gap: 8px; margin-bottom: 12px; }
+
+    input[type="text"] {
+      flex: 1;
+      background: #16213e;
+      border: 1px solid #333;
+      color: #eee;
+      padding: 7px 10px;
+      border-radius: 4px;
+      font-family: 'Courier New', monospace;
+      font-size: 12px;
+      outline: none;
+    }
+    input[type="text"]:focus { border-color: #74b9ff; }
+    input[type="text"]::placeholder { color: #444; }
+
+    .btn-add {
+      background: #0984e3;
+      color: #fff;
+      border: none;
+      padding: 7px 14px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-family: 'Courier New', monospace;
+      font-size: 12px;
+    }
+    .btn-add:hover { background: #74b9ff; }
+
+    .site-list { list-style: none; display: flex; flex-direction: column; gap: 5px; }
+
+    .site-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #16213e;
+      border: 1px solid #2d3436;
+      border-radius: 4px;
+      padding: 6px 10px;
+      font-size: 12px;
+      color: #ccc;
+    }
+
+    .site-item button {
+      background: none;
+      border: none;
+      color: #444;
+      cursor: pointer;
+      font-size: 13px;
+      line-height: 1;
+      padding: 0 2px;
+    }
+    .site-item button:hover { color: #ff7675; }
+
+    .divider {
+      max-width: 620px;
+      border: none;
+      border-top: 1px solid #2d3436;
+      margin: 36px 0;
+    }
+
+    .section-title {
+      font-size: 12px;
+      letter-spacing: 3px;
+      color: #a29bfe;
+      margin-bottom: 14px;
+    }
+
+    .pet-info {
+      font-size: 12px;
+      color: #888;
+      line-height: 2;
+      margin-bottom: 16px;
+    }
+    .pet-info strong { color: #a29bfe; }
+
+    .btn-danger {
+      background: none;
+      border: 1px solid #d63031;
+      color: #d63031;
+      padding: 7px 16px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-family: 'Courier New', monospace;
+      font-size: 12px;
+    }
+    .btn-danger:hover { background: #d63031; color: #fff; }
+  </style>
+</head>
+<body>
+  <h1>⚙ SETTINGS</h1>
+  <p class="subtitle">configure which sites boost or drain your pet</p>
+
+  <div class="columns">
+    <div class="col-productive">
+      <div class="col-title">✓ productive sites</div>
+      <div class="add-row">
+        <input type="text" id="productiveInput" placeholder="github.com">
+        <button class="btn-add" id="addProductive">+ add</button>
+      </div>
+      <ul class="site-list" id="productiveList"></ul>
+    </div>
+
+    <div class="col-distracting">
+      <div class="col-title">✕ distracting sites</div>
+      <div class="add-row">
+        <input type="text" id="distractingInput" placeholder="youtube.com">
+        <button class="btn-add" id="addDistracting">+ add</button>
+      </div>
+      <ul class="site-list" id="distractingList"></ul>
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <div class="section-title">♦ PET STATUS</div>
+  <div class="pet-info" id="petInfo">loading...</div>
+  <button class="btn-danger" id="resetPetBtn">↺ reset pet (start over)</button>
+
+  <script src="settings.js"></script>
+</body>
+</html>
