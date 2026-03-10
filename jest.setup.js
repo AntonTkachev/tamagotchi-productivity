@@ -34,9 +34,14 @@ global.chrome = {
   tabs: {
     create: jest.fn(),
   },
+  i18n: {
+    getUILanguage: jest.fn(() => 'en'),
+    getMessage:    jest.fn(key => key),
+  },
 };
 
-// Reset store and mocks between tests
+// Reset store and clear mock call history between tests.
+// Note: listeners captured at module load time (before this runs) are unaffected.
 beforeEach(() => {
   Object.keys(store).forEach(k => delete store[k]);
   jest.clearAllMocks();
