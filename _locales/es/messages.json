@@ -21,6 +21,8 @@
   "info_days":      { "message": "días" },
   "info_focus":     { "message": "Foco:" },
   "info_min_today": { "message": "min hoy" },
+  "info_streak":    { "message": "Racha:" },
+  "info_best":      { "message": "Récord:" },
 
   "dead_title": { "message": "💀 tu mascota murió" },
   "dead_hint":  { "message": "visita un sitio productivo para revivirla" },

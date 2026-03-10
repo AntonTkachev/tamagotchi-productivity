@@ -42,7 +42,9 @@ function renderPetInfo(pet) {
     `Health: <strong>${Math.round(pet.health || 0)}</strong>&emsp;` +
     `Happiness: <strong>${Math.round(pet.happiness || 0)}</strong><br>` +
     `Born: <strong>${born}</strong>&emsp;` +
-    `Focus today: <strong>${Math.round(pet.focusMinutesToday || 0)} min</strong>`;
+    `Focus today: <strong>${Math.round(pet.focusMinutesToday || 0)} min</strong><br>` +
+    `Streak: <strong>${pet.streak || 0} days</strong>&emsp;` +
+    `Best: <strong>${pet.bestStreak || 0} days</strong>`;
 }
 
 function cleanHostname(raw) {

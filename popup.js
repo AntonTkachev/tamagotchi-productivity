@@ -285,8 +285,10 @@ function updateUI(data) {
   document.getElementById('healthVal').textContent = h;
   document.getElementById('happyVal').textContent  = hp;
 
-  document.getElementById('ageVal').textContent   = pet.age || 0;
-  document.getElementById('focusVal').textContent = Math.round(pet.focusMinutesToday || 0);
+  document.getElementById('ageVal').textContent        = pet.age || 0;
+  document.getElementById('focusVal').textContent      = Math.round(pet.focusMinutesToday || 0);
+  document.getElementById('streakVal').textContent     = pet.streak     || 0;
+  document.getElementById('bestStreakVal').textContent = pet.bestStreak || 0;
 }
 
 // ─── Init ─────────────────────────────────────────────────────────────────────

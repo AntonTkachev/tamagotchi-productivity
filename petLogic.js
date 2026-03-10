@@ -14,6 +14,8 @@ function createDefaultPet() {
     lastUpdated: now,
     focusMinutesToday: 0,
     lastFocusDate: new Date(now).toDateString(),
+    streak: 0,
+    bestStreak: 0,
     isDead: false,
     currentSiteType: 'neutral',
   };
@@ -82,9 +84,15 @@ function computeStatUpdate(pet, settings, currentSite, siteTimestamp, now) {
 
   const result = { ...pet };
 
-  // Reset daily focus counter on new day
+  // New day: update streak, reset daily focus counter
   const today = new Date(now).toDateString();
   if (result.lastFocusDate !== today) {
+    if (result.focusMinutesToday > 0) {
+      result.streak = (result.streak || 0) + 1;
+    } else {
+      result.streak = 0;
+    }
+    result.bestStreak = Math.max(result.bestStreak || 0, result.streak);
     result.focusMinutesToday = 0;
     result.lastFocusDate = today;
   }

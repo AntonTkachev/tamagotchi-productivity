@@ -177,6 +177,8 @@ confirmBtn.addEventListener('click', async () => {
     lastUpdated:       now,
     focusMinutesToday: 0,
     lastFocusDate:     new Date(now).toDateString(),
+    streak:            0,
+    bestStreak:        0,
     isDead:            false,
     currentSiteType:   'neutral',
   };
