@@ -1,0 +1,52 @@
+{
+  "ext_name":        { "message": "Tamagotchi de Productividad" },
+  "ext_description": { "message": "Una mascota virtual que crece con tu productividad" },
+
+  "stage_egg":    { "message": "● HUEVO ●" },
+  "stage_baby":   { "message": "● BEBÉ ●" },
+  "stage_teen":   { "message": "● JOVEN ●" },
+  "stage_adult":  { "message": "● ADULTO ●" },
+  "stage_legend": { "message": "✦ LEYENDA ✦" },
+  "stage_dead":   { "message": "✝ PARTIÓ ✝" },
+
+  "mood_productive":  { "message": "🎉 ¡en racha!" },
+  "mood_distracting": { "message": "😰 distraído..." },
+  "mood_neutral":     { "message": "😊 relajado" },
+  "mood_sleeping":    { "message": "💤 durmiendo" },
+  "mood_dead":        { "message": "💀 descansando" },
+
+  "stat_health":    { "message": "❤ Salud" },
+  "stat_happiness": { "message": "★ Felicidad" },
+  "info_age":       { "message": "Edad:" },
+  "info_days":      { "message": "días" },
+  "info_focus":     { "message": "Foco:" },
+  "info_min_today": { "message": "min hoy" },
+
+  "dead_title": { "message": "💀 tu mascota murió" },
+  "dead_hint":  { "message": "visita un sitio productivo para revivirla" },
+
+  "onboarding_title":    { "message": "Elige tu compañero" },
+  "onboarding_subtitle": { "message": "¿quién saldrá de tu huevo?" },
+
+  "rabbit_name":  { "message": "Conejo" },
+  "cat_name":     { "message": "Gatito" },
+  "dog_name":     { "message": "Amigo" },
+  "parrot_name":  { "message": "Poli" },
+  "rabbit_trait": { "message": "curioso y enérgico" },
+  "cat_trait":    { "message": "independiente e inteligente" },
+  "dog_trait":    { "message": "leal y entusiasta" },
+  "parrot_trait": { "message": "creativo y parlanchín" },
+  "btn_hatch":    { "message": "Incubar mi huevo 🥚" },
+  "egg_note":     { "message": "¡tu mascota empieza como huevo — pronto sabrás quién está dentro!" },
+
+  "settings_title":    { "message": "⚙ AJUSTES" },
+  "settings_subtitle": { "message": "configura qué sitios afectan a tu mascota" },
+  "productive_sites":  { "message": "✓ sitios productivos" },
+  "distracting_sites": { "message": "✕ sitios distrayentes" },
+  "placeholder_prod":  { "message": "github.com" },
+  "placeholder_dist":  { "message": "youtube.com" },
+  "btn_add":           { "message": "+ añadir" },
+  "pet_status":        { "message": "♦ ESTADO DE LA MASCOTA" },
+  "btn_reset":         { "message": "↺ reiniciar mascota (empezar de nuevo)" },
+  "confirm_reset_msg": { "message": "¿Reiniciar tu mascota? Empezará de nuevo como un huevo." }
+}

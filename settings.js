@@ -71,7 +71,7 @@ async function save() {
 }
 
 async function resetPet() {
-  if (!confirm('Reset your pet? It will start over as a fresh egg.')) return;
+  if (!confirm(chrome.i18n.getMessage('confirm_reset_msg') || 'Reset your pet? It will start over as a fresh egg.')) return;
   const newPet = {
     health: 80,
     happiness: 80,

@@ -124,35 +124,36 @@
   </style>
 </head>
 <body>
-  <div class="title">Choose your companion</div>
-  <div class="subtitle">who will hatch from your egg?</div>
+  <div class="title" data-i18n="onboarding_title">Choose your companion</div>
+  <div class="subtitle" data-i18n="onboarding_subtitle">who will hatch from your egg?</div>
 
   <div class="cards">
     <div class="card rabbit" data-type="rabbit">
       <canvas id="canvas-rabbit" width="100" height="100"></canvas>
-      <div class="pet-name">Bunny</div>
-      <div class="pet-trait">curious & energetic</div>
+      <div class="pet-name" data-i18n="rabbit_name">Bunny</div>
+      <div class="pet-trait" data-i18n="rabbit_trait">curious & energetic</div>
     </div>
     <div class="card cat" data-type="cat">
       <canvas id="canvas-cat" width="100" height="100"></canvas>
-      <div class="pet-name">Kitty</div>
-      <div class="pet-trait">independent & clever</div>
+      <div class="pet-name" data-i18n="cat_name">Kitty</div>
+      <div class="pet-trait" data-i18n="cat_trait">independent & clever</div>
     </div>
     <div class="card dog" data-type="dog">
       <canvas id="canvas-dog" width="100" height="100"></canvas>
-      <div class="pet-name">Buddy</div>
-      <div class="pet-trait">loyal & enthusiastic</div>
+      <div class="pet-name" data-i18n="dog_name">Buddy</div>
+      <div class="pet-trait" data-i18n="dog_trait">loyal & enthusiastic</div>
     </div>
     <div class="card parrot" data-type="parrot">
       <canvas id="canvas-parrot" width="100" height="100"></canvas>
-      <div class="pet-name">Poly</div>
-      <div class="pet-trait">creative & chatty</div>
+      <div class="pet-name" data-i18n="parrot_name">Poly</div>
+      <div class="pet-trait" data-i18n="parrot_trait">creative & chatty</div>
     </div>
   </div>
 
-  <button class="confirm-btn" id="confirmBtn">Hatch my egg 🥚</button>
-  <div class="egg-note">your pet starts as an egg — you'll find out who's inside!</div>
+  <button class="confirm-btn" id="confirmBtn" data-i18n="btn_hatch">Hatch my egg 🥚</button>
+  <div class="egg-note" data-i18n="egg_note">your pet starts as an egg — you'll find out who's inside!</div>
 
+  <script src="i18n.js"></script>
   <script src="onboarding.js"></script>
 </body>
 </html>

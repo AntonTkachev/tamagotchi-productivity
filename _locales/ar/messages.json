@@ -1,0 +1,52 @@
+{
+  "ext_name":        { "message": "تاماغوتشي الإنتاجية" },
+  "ext_description": { "message": "حيوان أليف افتراضي يزدهر بإنتاجيتك" },
+
+  "stage_egg":    { "message": "● بيضة ●" },
+  "stage_baby":   { "message": "● صغير ●" },
+  "stage_teen":   { "message": "● مراهق ●" },
+  "stage_adult":  { "message": "● بالغ ●" },
+  "stage_legend": { "message": "✦ أسطوري ✦" },
+  "stage_dead":   { "message": "✝ راحل ✝" },
+
+  "mood_productive":  { "message": "🎉 !في أوجه" },
+  "mood_distracting": { "message": "😰 ...مشتت" },
+  "mood_neutral":     { "message": "😊 مرتاح" },
+  "mood_sleeping":    { "message": "💤 نائم" },
+  "mood_dead":        { "message": "💀 راحل" },
+
+  "stat_health":    { "message": "❤ الصحة" },
+  "stat_happiness": { "message": "★ السعادة" },
+  "info_age":       { "message": "العمر:" },
+  "info_days":      { "message": "أيام" },
+  "info_focus":     { "message": "التركيز:" },
+  "info_min_today": { "message": "د اليوم" },
+
+  "dead_title": { "message": "💀 مات حيوانك الأليف" },
+  "dead_hint":  { "message": "زر موقعًا منتجًا لإحيائه" },
+
+  "onboarding_title":    { "message": "اختر رفيقك" },
+  "onboarding_subtitle": { "message": "من سيفقس من بيضتك؟" },
+
+  "rabbit_name":  { "message": "أرنب" },
+  "cat_name":     { "message": "قطة" },
+  "dog_name":     { "message": "كلب" },
+  "parrot_name":  { "message": "ببغاء" },
+  "rabbit_trait": { "message": "فضولي ونشيط" },
+  "cat_trait":    { "message": "مستقل وذكي" },
+  "dog_trait":    { "message": "وفي ومتحمس" },
+  "parrot_trait": { "message": "مبدع وثرثار" },
+  "btn_hatch":    { "message": "افقس بيضتي 🥚" },
+  "egg_note":     { "message": "يبدأ حيوانك الأليف كبيضة — ستعرف قريبًا من بداخلها!" },
+
+  "settings_title":    { "message": "⚙ الإعدادات" },
+  "settings_subtitle": { "message": "حدد المواقع التي تعزز أو تستنزف طاقة حيوانك الأليف" },
+  "productive_sites":  { "message": "✓ مواقع منتجة" },
+  "distracting_sites": { "message": "✕ مواقع مشتتة" },
+  "placeholder_prod":  { "message": "github.com" },
+  "placeholder_dist":  { "message": "youtube.com" },
+  "btn_add":           { "message": "+ إضافة" },
+  "pet_status":        { "message": "♦ حالة الحيوان الأليف" },
+  "btn_reset":         { "message": "↺ إعادة تعيين (البداية من جديد)" },
+  "confirm_reset_msg": { "message": "إعادة تعيين حيوانك الأليف؟ سيبدأ من جديد كبيضة." }
+}

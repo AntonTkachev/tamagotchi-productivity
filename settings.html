@@ -129,24 +129,24 @@
   </style>
 </head>
 <body>
-  <h1>⚙ SETTINGS</h1>
-  <p class="subtitle">configure which sites boost or drain your pet</p>
+  <h1 data-i18n="settings_title">⚙ SETTINGS</h1>
+  <p class="subtitle" data-i18n="settings_subtitle">configure which sites boost or drain your pet</p>
 
   <div class="columns">
     <div class="col-productive">
-      <div class="col-title">✓ productive sites</div>
+      <div class="col-title" data-i18n="productive_sites">✓ productive sites</div>
       <div class="add-row">
-        <input type="text" id="productiveInput" placeholder="github.com">
-        <button class="btn-add" id="addProductive">+ add</button>
+        <input type="text" id="productiveInput" data-i18n-placeholder="placeholder_prod" placeholder="github.com">
+        <button class="btn-add" id="addProductive" data-i18n="btn_add">+ add</button>
       </div>
       <ul class="site-list" id="productiveList"></ul>
     </div>
 
     <div class="col-distracting">
-      <div class="col-title">✕ distracting sites</div>
+      <div class="col-title" data-i18n="distracting_sites">✕ distracting sites</div>
       <div class="add-row">
-        <input type="text" id="distractingInput" placeholder="youtube.com">
-        <button class="btn-add" id="addDistracting">+ add</button>
+        <input type="text" id="distractingInput" data-i18n-placeholder="placeholder_dist" placeholder="youtube.com">
+        <button class="btn-add" id="addDistracting" data-i18n="btn_add">+ add</button>
       </div>
       <ul class="site-list" id="distractingList"></ul>
     </div>
@@ -154,10 +154,11 @@
 
   <hr class="divider">
 
-  <div class="section-title">♦ PET STATUS</div>
-  <div class="pet-info" id="petInfo">loading...</div>
-  <button class="btn-danger" id="resetPetBtn">↺ reset pet (start over)</button>
+  <div class="section-title" data-i18n="pet_status">♦ PET STATUS</div>
+  <div class="pet-info" id="petInfo">...</div>
+  <button class="btn-danger" id="resetPetBtn" data-i18n="btn_reset">↺ reset pet (start over)</button>
 
+  <script src="i18n.js"></script>
   <script src="settings.js"></script>
 </body>
 </html>

@@ -253,22 +253,13 @@ function tick() {
 
 const PET_NAMES = { rabbit:'BUNNY', cat:'KITTY', dog:'BUDDY', parrot:'POLY' };
 
-const STAGE_LABELS = {
-  egg:    '● EGG ●',
-  baby:   '● BABY ●',
-  teen:   '● TEEN ●',
-  adult:  '● ADULT ●',
-  legend: '✦ LEGEND ✦',
-  dead:   '✝ DEPARTED ✝',
-};
+function stageLabel(stage) {
+  return t('stage_' + stage) || stage.toUpperCase();
+}
 
-const MOOD_LABELS = {
-  productive:  '🎉 thriving!',
-  distracting: '😰 distracted...',
-  neutral:     '😊 chilling',
-  sleeping:    '💤 sleeping',
-  dead:        '💀 rip',
-};
+function moodLabel(siteType) {
+  return t('mood_' + siteType) || siteType;
+}
 
 function updateUI(data) {
   if (!data) return;
@@ -278,12 +269,12 @@ function updateUI(data) {
     PET_NAMES[pet.petType] || 'PIXEL';
 
   document.getElementById('stageBadge').textContent =
-    STAGE_LABELS[pet.stage] || STAGE_LABELS.egg;
+    stageLabel(pet.stage || 'egg');
 
   document.getElementById('deadOverlay').classList.toggle('visible', !!pet.isDead);
 
   document.getElementById('mood').textContent =
-    MOOD_LABELS[pet.currentSiteType] || MOOD_LABELS.neutral;
+    moodLabel(pet.currentSiteType || 'neutral');
 
   container.style.boxShadow = GLOW[pet.isDead ? 'dead' : (pet.currentSiteType || 'neutral')] || 'none';
 

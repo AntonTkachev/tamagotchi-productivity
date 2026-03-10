@@ -1,0 +1,52 @@
+{
+  "ext_name":        { "message": "Тамагочи Продуктивности" },
+  "ext_description": { "message": "Виртуальный питомец, который растёт вместе с твоей продуктивностью" },
+
+  "stage_egg":    { "message": "● ЯЙЦО ●" },
+  "stage_baby":   { "message": "● МАЛЫШ ●" },
+  "stage_teen":   { "message": "● ПОДРОСТОК ●" },
+  "stage_adult":  { "message": "● ВЗРОСЛЫЙ ●" },
+  "stage_legend": { "message": "✦ ЛЕГЕНДА ✦" },
+  "stage_dead":   { "message": "✝ УШЁЛ ✝" },
+
+  "mood_productive":  { "message": "🎉 в ударе!" },
+  "mood_distracting": { "message": "😰 отвлёкся..." },
+  "mood_neutral":     { "message": "😊 расслабляется" },
+  "mood_sleeping":    { "message": "💤 спит" },
+  "mood_dead":        { "message": "💀 умер" },
+
+  "stat_health":    { "message": "❤ Здоровье" },
+  "stat_happiness": { "message": "★ Счастье" },
+  "info_age":       { "message": "Возраст:" },
+  "info_days":      { "message": "дней" },
+  "info_focus":     { "message": "Фокус:" },
+  "info_min_today": { "message": "мин сегодня" },
+
+  "dead_title": { "message": "💀 питомец умер" },
+  "dead_hint":  { "message": "открой продуктивный сайт чтобы воскресить" },
+
+  "onboarding_title":    { "message": "Выбери питомца" },
+  "onboarding_subtitle": { "message": "кто вылупится из твоего яйца?" },
+
+  "rabbit_name":  { "message": "Зайка" },
+  "cat_name":     { "message": "Котик" },
+  "dog_name":     { "message": "Бадди" },
+  "parrot_name":  { "message": "Поли" },
+  "rabbit_trait": { "message": "любознательный и энергичный" },
+  "cat_trait":    { "message": "независимый и умный" },
+  "dog_trait":    { "message": "преданный и задорный" },
+  "parrot_trait": { "message": "творческий и болтливый" },
+  "btn_hatch":    { "message": "Вылупить яйцо 🥚" },
+  "egg_note":     { "message": "питомец начинает как яйцо — скоро узнаешь кто внутри!" },
+
+  "settings_title":    { "message": "⚙ НАСТРОЙКИ" },
+  "settings_subtitle": { "message": "настрой сайты, которые влияют на питомца" },
+  "productive_sites":  { "message": "✓ продуктивные сайты" },
+  "distracting_sites": { "message": "✕ отвлекающие сайты" },
+  "placeholder_prod":  { "message": "github.com" },
+  "placeholder_dist":  { "message": "youtube.com" },
+  "btn_add":           { "message": "+ добавить" },
+  "pet_status":        { "message": "♦ СТАТУС ПИТОМЦА" },
+  "btn_reset":         { "message": "↺ сбросить питомца (начать заново)" },
+  "confirm_reset_msg": { "message": "Сбросить питомца? Он начнёт заново как яйцо." }
+}

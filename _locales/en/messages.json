@@ -1,0 +1,52 @@
+{
+  "ext_name":        { "message": "Productivity Tamagotchi" },
+  "ext_description": { "message": "A virtual pet that thrives on your productivity" },
+
+  "stage_egg":    { "message": "● EGG ●" },
+  "stage_baby":   { "message": "● BABY ●" },
+  "stage_teen":   { "message": "● TEEN ●" },
+  "stage_adult":  { "message": "● ADULT ●" },
+  "stage_legend": { "message": "✦ LEGEND ✦" },
+  "stage_dead":   { "message": "✝ DEPARTED ✝" },
+
+  "mood_productive":  { "message": "🎉 thriving!" },
+  "mood_distracting": { "message": "😰 distracted..." },
+  "mood_neutral":     { "message": "😊 chilling" },
+  "mood_sleeping":    { "message": "💤 sleeping" },
+  "mood_dead":        { "message": "💀 rip" },
+
+  "stat_health":    { "message": "❤ Health" },
+  "stat_happiness": { "message": "★ Happiness" },
+  "info_age":       { "message": "Age:" },
+  "info_days":      { "message": "days" },
+  "info_focus":     { "message": "Focus:" },
+  "info_min_today": { "message": "min today" },
+
+  "dead_title": { "message": "💀 your pet died" },
+  "dead_hint":  { "message": "visit a productive site to revive" },
+
+  "onboarding_title":    { "message": "Choose your companion" },
+  "onboarding_subtitle": { "message": "who will hatch from your egg?" },
+
+  "rabbit_name":  { "message": "Bunny" },
+  "cat_name":     { "message": "Kitty" },
+  "dog_name":     { "message": "Buddy" },
+  "parrot_name":  { "message": "Poly" },
+  "rabbit_trait": { "message": "curious & energetic" },
+  "cat_trait":    { "message": "independent & clever" },
+  "dog_trait":    { "message": "loyal & enthusiastic" },
+  "parrot_trait": { "message": "creative & chatty" },
+  "btn_hatch":    { "message": "Hatch my egg 🥚" },
+  "egg_note":     { "message": "your pet starts as an egg — you'll find out who's inside!" },
+
+  "settings_title":    { "message": "⚙ SETTINGS" },
+  "settings_subtitle": { "message": "configure which sites boost or drain your pet" },
+  "productive_sites":  { "message": "✓ productive sites" },
+  "distracting_sites": { "message": "✕ distracting sites" },
+  "placeholder_prod":  { "message": "github.com" },
+  "placeholder_dist":  { "message": "youtube.com" },
+  "btn_add":           { "message": "+ add" },
+  "pet_status":        { "message": "♦ PET STATUS" },
+  "btn_reset":         { "message": "↺ reset pet (start over)" },
+  "confirm_reset_msg": { "message": "Reset your pet? It will start over as a fresh egg." }
+}

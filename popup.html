@@ -151,8 +151,8 @@
   <div class="canvas-container">
     <canvas id="petCanvas" width="160" height="160"></canvas>
     <div class="dead-overlay" id="deadOverlay">
-      <div class="dead-title">💀 your pet died</div>
-      <div class="dead-hint">visit a productive site to revive</div>
+      <div class="dead-title" data-i18n="dead_title">💀 your pet died</div>
+      <div class="dead-hint" data-i18n="dead_hint">visit a productive site to revive</div>
     </div>
   </div>
 
@@ -160,14 +160,14 @@
 
   <div class="stats">
     <div class="stat">
-      <span class="stat-label">❤ Health</span>
+      <span class="stat-label" data-i18n="stat_health">❤ Health</span>
       <div class="bar-wrap">
         <div class="bar-fill health-fill" id="healthBar" style="width:80%"></div>
       </div>
       <span class="stat-val" id="healthVal">80</span>
     </div>
     <div class="stat">
-      <span class="stat-label">★ Happiness</span>
+      <span class="stat-label" data-i18n="stat_happiness">★ Happiness</span>
       <div class="bar-wrap">
         <div class="bar-fill happy-fill" id="happyBar" style="width:80%"></div>
       </div>
@@ -176,10 +176,11 @@
   </div>
 
   <div class="info-row">
-    <span>Age: <strong id="ageVal">0</strong> days</span>
-    <span>Focus: <strong id="focusVal">0</strong> min today</span>
+    <span><span data-i18n="info_age">Age:</span> <strong id="ageVal">0</strong> <span data-i18n="info_days">days</span></span>
+    <span><span data-i18n="info_focus">Focus:</span> <strong id="focusVal">0</strong> <span data-i18n="info_min_today">min today</span></span>
   </div>
 
+  <script src="i18n.js"></script>
   <script src="popup.js"></script>
 </body>
 </html>
