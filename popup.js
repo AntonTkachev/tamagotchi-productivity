@@ -1,38 +1,44 @@
-const PIXEL = 14; // px per sprite pixel → 10×10 sprite = 140×140px on 160×160 canvas
+const PIXEL = 14; // 10×10 sprite → 140×140px on 160×160 canvas
 
-const PALETTE = {
+// ─── Shared palettes ──────────────────────────────────────────────────────────
+
+const BASE_PALETTE = {
   '.': null,
-  'b': '#74B9FF', // body (blue, default)
-  'd': '#0984E3', // dark body accent
-  'e': '#2D3436', // eye dark
-  'w': '#FFFFFF', // eye white
-
-  'p': '#FD79A8', // cheek pink
   's': '#DFE6E9', // egg shell
   'S': '#B2BEC3', // egg shell dark
+  'e': '#2D3436', // generic eye dark
   'x': '#1A1A2E', // dead X-eye
   'y': '#FDCB6E', // sparkle gold
 };
 
-// Body color overrides per site type
-const STATE_BODY = {
-  productive:  { b: '#00B894', d: '#00836B' },
-  distracting: { b: '#FF7675', d: '#D63031' },
-  neutral:     { b: '#74B9FF', d: '#0984E3' },
-  sleeping:    { b: '#A29BFE', d: '#6C5CE7' },
-  dead:        { b: '#636E72', d: '#2D3436' },
+const ANIMAL_PALETTES = {
+  rabbit: { b:'#F5F5F5', d:'#DCDCDC', p:'#FFB3C6', n:'#FD79A8', e:'#2D3436', w:'#FFFFFF' },
+  cat:    { b:'#FDCB6E', d:'#E17055', G:'#00CEC9', p:'#FD79A8', e:'#2D3436', w:'#FFFFFF' },
+  dog:    { b:'#C8956C', d:'#8B5E3C', e:'#2D3436', p:'#FD79A8', r:'#FF7675', w:'#FFFFFF' },
+  parrot: { b:'#00B894', d:'#00836B', y:'#FDCB6E', r:'#FF6B6B', e:'#2D3436', k:'#E17055', w:'#FFFFFF' },
 };
 
-// ─── Sprites (10 wide × 10 tall) ──────────────────────────────────────────────
-const SPRITES = {
+// Glow colours per site type (applied as box-shadow on canvas container)
+const GLOW = {
+  productive:  '0 0 24px rgba(0, 184, 148, 0.7)',
+  distracting: '0 0 24px rgba(255, 118, 117, 0.7)',
+  sleeping:    '0 0 16px rgba(162, 155, 254, 0.4)',
+  neutral:     'none',
+  dead:        '0 0 24px rgba(99, 110, 114, 0.5)',
+};
+
+// ─── Sprites ──────────────────────────────────────────────────────────────────
+
+// Shared: egg and dead (same for all pet types)
+const SHARED_SPRITES = {
   egg: [
     [ // frame 0 – eyes open
       '..ssssss..',
       '.ssssssss.',
       'ssssssssss',
-      'ssseSsesss', // eyes at 3,6
+      'ssseSsesss',
       'ssssssssss',
-      'ssPssssPss', // cheeks at 2,7
+      'ssPssssPss',
       'ssssssssss',
       '.ssssssss.',
       '..ssssss..',
@@ -51,129 +57,20 @@ const SPRITES = {
       '..........',
     ],
   ],
-
-  baby: [
-    [ // frame 0 – eyes open
-      '..bbbbbb..',
-      '.bbbbbbbb.',
-      'bbbbbbbbbb',
-      'bbbewwebbb', // eyes at 3,6; whites at 4,5
-      'bbbbbbbbbb',
-      'bbPbbbbPbb', // cheeks at 2,7
-      '.bbbbbbbb.',
-      '..bbbbbb..',
-      '.b......b.',
-      '..........',
-    ],
-    [ // frame 1 – blink
-      '..bbbbbb..',
-      '.bbbbbbbb.',
-      'bbbbbbbbbb',
-      'bbbbbbbbbb',
-      'bbbbbbbbbb',
-      'bbPbbbbPbb',
-      '.bbbbbbbb.',
-      '..bbbbbb..',
-      '.b......b.',
-      '..........',
-    ],
-  ],
-
-  teen: [
-    [ // frame 0
-      '.bbbbbbb..',
-      'bbbbbbbbbb',
-      'bbbbbbbbbb',
-      'bbbewwebbb',
-      'bbbbbbbbbb',
-      'bbPbbbbPbb',
-      'bbbbbbbbbb',
-      '.bbbbbbbb.',
-      '.b......b.',
-      '..........',
-    ],
-    [ // frame 1 – blink
-      '.bbbbbbb..',
-      'bbbbbbbbbb',
-      'bbbbbbbbbb',
-      'bbbbbbbbbb',
-      'bbbbbbbbbb',
-      'bbPbbbbPbb',
-      'bbbbbbbbbb',
-      '.bbbbbbbb.',
-      '.b......b.',
-      '..........',
-    ],
-  ],
-
-  adult: [
-    [ // frame 0
-      '.bbbbbbbb.',
-      'dbbbbbbbbd',
-      'bbbbbbbbbb',
-      'bbbewwebbb',
-      'bbbbbbbbbb',
-      'bbPbbbbPbb',
-      'bbbbbbbbbb',
-      'dbbbbbbbbd',
-      '.b......b.',
-      '..........',
-    ],
-    [ // frame 1 – blink
-      '.bbbbbbbb.',
-      'dbbbbbbbbd',
-      'bbbbbbbbbb',
-      'bbbbbbbbbb',
-      'bbbbbbbbbb',
-      'bbPbbbbPbb',
-      'bbbbbbbbbb',
-      'dbbbbbbbbd',
-      '.b......b.',
-      '..........',
-    ],
-  ],
-
-  legend: [
-    [ // frame 0 – sparkles up
-      'y.bbbbbb.y',
-      '.bbbbbbbb.',
-      'bbbbbbbbbb',
-      'bbbewwebbb',
-      'bbbbbbbbbb',
-      'bbPbbbbPbb',
-      'bbbbbbbbbb',
-      'dbbbbbbbbd',
-      '.b......b.',
-      '..........',
-    ],
-    [ // frame 1 – sparkles shift + blink
-      '.y.bbbb.y.',
-      '.bbbbbbbb.',
-      'bbbbbbbbbb',
-      'bbbbbbbbbb',
-      'bbbbbbbbbb',
-      'bbPbbbbPbb',
-      'bbbbbbbbbb',
-      'dbbbbbbbbd',
-      '.b......b.',
-      '..........',
-    ],
-  ],
-
   dead: [
-    [ // frame 0
+    [
       '..........',
       '..bbbbbb..',
       '.bbbbbbbb.',
       'bbbbbbbbbb',
-      'bbbxbbxbbb', // X eyes at 3,6
+      'bbbxbbxbbb',
       'bbbbbbbbbb',
       '.bbbbbbbb.',
       '..bbbbbb..',
       '.b......b.',
       '..........',
     ],
-    [ // frame 1 – same (no animation when dead)
+    [
       '..........',
       '..bbbbbb..',
       '.bbbbbbbb.',
@@ -188,23 +85,145 @@ const SPRITES = {
   ],
 };
 
-// ─── Drawing ──────────────────────────────────────────────────────────────────
-const canvas = document.getElementById('petCanvas');
-const ctx = canvas.getContext('2d');
+// Per-animal sprites for baby / teen / adult / legend
+const ANIMAL_SPRITES = {
 
-function buildPalette(stage, siteType) {
-  if (stage === 'legend') {
-    return { ...PALETTE, b: '#FDCB6E', d: '#E17055' };
-  }
-  const key = stage === 'dead' ? 'dead' : (siteType || 'neutral');
-  return { ...PALETTE, ...(STATE_BODY[key] || STATE_BODY.neutral) };
+  rabbit: {
+    baby: [
+      [ '..bb..bb..', '.bbbbbbbb.', 'bbbbbbbbbb', 'bbebbbbebb',
+        'bbbbbbbbbb', 'bbbbnnbbbb', '.bbbbbbbb.', '..bbbbbb..', '.b......b.', '..........' ],
+      [ '..bb..bb..', '.bbbbbbbb.', 'bbbbbbbbbb', 'bbbbbbbbbb',
+        'bbbbbbbbbb', 'bbbbnnbbbb', '.bbbbbbbb.', '..bbbbbb..', '.b......b.', '..........' ],
+    ],
+    teen: [
+      [ '.bb....bb.', '.bpb..bpb.', 'bbbbbbbbbb', 'bbbbbbbbbb',
+        'bbebbbbebb', 'bbbbbbbbbb', 'bbbbnnbbbb', '.bbbbbbbb.', '.b......b.', '..........' ],
+      [ '.bb....bb.', '.bpb..bpb.', 'bbbbbbbbbb', 'bbbbbbbbbb',
+        'bbbbbbbbbb', 'bbbbbbbbbb', 'bbbbnnbbbb', '.bbbbbbbb.', '.b......b.', '..........' ],
+    ],
+    adult: [
+      [ '.bb....bb.', '.bpb..bpb.', '.bpb..bpb.', 'bbbbbbbbbb',
+        'bbebbbbebb', 'bbbbbbbbbb', 'bbbbnnbbbb', 'bbbbbbbbbb', '.bbbbbbbb.', '..bb..bb..' ],
+      [ '.bb....bb.', '.bpb..bpb.', '.bpb..bpb.', 'bbbbbbbbbb',
+        'bbbbbbbbbb', 'bbbbbbbbbb', 'bbbbnnbbbb', 'bbbbbbbbbb', '.bbbbbbbb.', '..bb..bb..' ],
+    ],
+    legend: [
+      [ 'y.bb..bb.y', '.bpb..bpb.', '.bpb..bpb.', 'bbbbbbbbbb',
+        'bbebbbbebb', 'bbbbbbbbbb', 'bbbbnnbbbb', 'bbbbbbbbbb', '.bbbbbbbb.', '..bb..bb..' ],
+      [ '.y.bb.bb.y', '.bpb..bpb.', '.bpb..bpb.', 'bbbbbbbbbb',
+        'bbbbbbbbbb', 'bbbbbbbbbb', 'bbbbnnbbbb', 'bbbbbbbbbb', '.bbbbbbbb.', '..bb..bb..' ],
+    ],
+  },
+
+  cat: {
+    baby: [
+      [ '..b....b..', '.bb....bb.', '.bbbbbbbb.', 'bbbbbbbbbb',
+        'bbGbbbbGbb', 'bbbbbbbbbb', 'bbbbpbbbbb', '.bbbbbbbb.', '..bbbbbb..', '.b......b.' ],
+      [ '..b....b..', '.bb....bb.', '.bbbbbbbb.', 'bbbbbbbbbb',
+        'bbbbbbbbbb', 'bbbbbbbbbb', 'bbbbpbbbbb', '.bbbbbbbb.', '..bbbbbb..', '.b......b.' ],
+    ],
+    teen: [
+      [ '.b......b.', '.bb....bb.', 'bbbbbbbbbb', 'bbbbbbbbbb',
+        'bbGbbbbGbb', 'bbbbbbbbbb', 'bbbbpbbbbb', '.bbbbbbbb.', '..bbbbbb..', '.b......b.' ],
+      [ '.b......b.', '.bb....bb.', 'bbbbbbbbbb', 'bbbbbbbbbb',
+        'bbbbbbbbbb', 'bbbbbbbbbb', 'bbbbpbbbbb', '.bbbbbbbb.', '..bbbbbb..', '.b......b.' ],
+    ],
+    adult: [
+      [ 'b........b', '.bb....bb.', '.bbbbbbbb.', 'bbbbbbbbbb',
+        'bbGbbbbGbb', 'bbbbbbbbbb', 'bbbbpbbbbb', 'bbbbbbbbbb', '.bbbbbbbb.', '..bb..bb..' ],
+      [ 'b........b', '.bb....bb.', '.bbbbbbbb.', 'bbbbbbbbbb',
+        'bbbbbbbbbb', 'bbbbbbbbbb', 'bbbbpbbbbb', 'bbbbbbbbbb', '.bbbbbbbb.', '..bb..bb..' ],
+    ],
+    legend: [
+      [ 'yb......by', '.bb....bb.', '.bbbbbbbb.', 'bbbbbbbbbb',
+        'bbGbbbbGbb', 'bbbbbbbbbb', 'bbbbpbbbbb', 'bbbbbbbbbb', '.bbbbbbbb.', '..bb..bb..' ],
+      [ '.yb....by.', '.bb....bb.', '.bbbbbbbb.', 'bbbbbbbbbb',
+        'bbbbbbbbbb', 'bbbbbbbbbb', 'bbbbpbbbbb', 'bbbbbbbbbb', '.bbbbbbbb.', '..bb..bb..' ],
+    ],
+  },
+
+  dog: {
+    baby: [
+      [ '..bbbbbb..', 'ddbbbbbbdd', 'ddbebbebdd', 'ddbbbbbbdd',
+        'ddbbpbbbdd', 'ddbbbbbbdd', '..bbbbbb..', '.bb....bb.', '.b......b.', '..........' ],
+      [ '..bbbbbb..', 'ddbbbbbbdd', 'ddbbbbbbdd', 'ddbbbbbbdd',
+        'ddbbpbbbdd', 'ddbbbbbbdd', '..bbbbbb..', '.bb....bb.', '.b......b.', '..........' ],
+    ],
+    teen: [
+      [ '..bbbbbb..', 'ddbbbbbbdd', 'ddbbbbbbdd', 'ddbebbebdd',
+        'ddbbbbbbdd', 'ddbbpbbbdd', 'ddbbrrbbdd', 'ddbbbbbbdd', '..bbbbbb..', '.b......b.' ],
+      [ '..bbbbbb..', 'ddbbbbbbdd', 'ddbbbbbbdd', 'ddbbbbbbdd',
+        'ddbbbbbbdd', 'ddbbpbbbdd', 'ddbbbbbbdd', 'ddbbbbbbdd', '..bbbbbb..', '.b......b.' ],
+    ],
+    adult: [
+      [ '..bbbbbb..', 'ddbbbbbbdd', 'ddbbbbbbdd', 'ddbebbebdd',
+        'ddbbbbbbdd', 'ddbbpbbbdd', 'ddbbrrbbdd', 'ddbbbbbbdd', '..bbbbbb..', '.bb....bb.' ],
+      [ '..bbbbbb..', 'ddbbbbbbdd', 'ddbbbbbbdd', 'ddbbbbbbdd',
+        'ddbbbbbbdd', 'ddbbpbbbdd', 'ddbbbbbbdd', 'ddbbbbbbdd', '..bbbbbb..', '.bb....bb.' ],
+    ],
+    legend: [
+      [ 'y.bbbbbb.y', 'ddbbbbbbdd', 'ddbbbbbbdd', 'ddbebbebdd',
+        'ddbbbbbbdd', 'ddbbpbbbdd', 'ddbbrrbbdd', 'ddbbbbbbdd', '..bbbbbb..', '.bb....bb.' ],
+      [ '.y.bbbb.y.', 'ddbbbbbbdd', 'ddbbbbbbdd', 'ddbbbbbbdd',
+        'ddbbbbbbdd', 'ddbbpbbbdd', 'ddbbbbbbdd', 'ddbbbbbbdd', '..bbbbbb..', '.bb....bb.' ],
+    ],
+  },
+
+  parrot: {
+    baby: [
+      [ '...rrrr...', '..bbbbbb..', '.bbbbbbbb.', '.bbebbebb.',
+        '..bbkkbb..', '.bbbbbbbb.', '..bbbbbb..', '.b......b.', '..........', '..........' ],
+      [ '...rrrr...', '..bbbbbb..', '.bbbbbbbb.', '.bbbbbbbb.',
+        '..bbkkbb..', '.bbbbbbbb.', '..bbbbbb..', '.b......b.', '..........', '..........' ],
+    ],
+    teen: [
+      [ '..yrrrry..', '..bbbbbb..', '.bbbbbbbb.', '.bbebbebb.',
+        '..bbkkbb..', '.bbbbbbbb.', '.bybbbbyb.', '..bbbbbb..', '.b......b.', '..........' ],
+      [ '..yrrrry..', '..bbbbbb..', '.bbbbbbbb.', '.bbbbbbbb.',
+        '..bbkkbb..', '.bbbbbbbb.', '.bybbbbyb.', '..bbbbbb..', '.b......b.', '..........' ],
+    ],
+    adult: [
+      [ '..yrrrry..', '..bbbbbb..', '.bbbbbbbb.', '.bbebbebb.',
+        '..bbkkbb..', '.bbbbbbbb.', '.bybbbbyb.', '.bbbbbbbb.', '.bb....bb.', '.b......b.' ],
+      [ '..yrrrry..', '..bbbbbb..', '.bbbbbbbb.', '.bbbbbbbb.',
+        '..bbkkbb..', '.bbbbbbbb.', '.bybbbbyb.', '.bbbbbbbb.', '.bb....bb.', '.b......b.' ],
+    ],
+    legend: [
+      [ 'y.yrrrry.y', '..bbbbbb..', '.bbbbbbbb.', '.bbebbebb.',
+        '..bbkkbb..', '.bbbbbbbb.', '.bybbbbyb.', '.bbbbbbbb.', '.bb....bb.', '.b......b.' ],
+      [ '.y.rrrr.y.', '..bbbbbb..', '.bbbbbbbb.', '.bbbbbbbb.',
+        '..bbkkbb..', '.bbbbbbbb.', '.bybbbbyb.', '.bbbbbbbb.', '.bb....bb.', '.b......b.' ],
+    ],
+  },
+};
+
+// ─── Drawing helpers ──────────────────────────────────────────────────────────
+
+function getSprites(stage, petType) {
+  if (stage === 'egg' || stage === 'dead') return SHARED_SPRITES[stage];
+  const animal = ANIMAL_SPRITES[petType];
+  if (!animal) return SHARED_SPRITES.egg;
+  return animal[stage] || animal.adult;
 }
+
+function buildPalette(stage, petType) {
+  const animal = ANIMAL_PALETTES[petType] || ANIMAL_PALETTES.rabbit;
+  const base   = { ...BASE_PALETTE, ...animal };
+
+  if (stage === 'dead') {
+    return { ...base, b: '#636E72', d: '#2D3436' };
+  }
+  return base;
+}
+
+const canvas    = document.getElementById('petCanvas');
+const ctx       = canvas.getContext('2d');
+const container = document.querySelector('.canvas-container');
 
 function drawSprite(rows, palette) {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   const offsetX = Math.floor((canvas.width  - rows[0].length * PIXEL) / 2);
   const offsetY = Math.floor((canvas.height - rows.length    * PIXEL) / 2);
-
   for (let r = 0; r < rows.length; r++) {
     for (let c = 0; c < rows[r].length; c++) {
       const color = palette[rows[r][c]];
@@ -217,18 +236,23 @@ function drawSprite(rows, palette) {
 }
 
 // ─── State ────────────────────────────────────────────────────────────────────
-let pet = null;
+
+let pet   = null;
 let frame = 0;
 
 function tick() {
   if (!pet) return;
-  const stage = pet.stage || 'egg';
-  const frames = SPRITES[stage] || SPRITES.egg;
-  drawSprite(frames[frame % frames.length], buildPalette(stage, pet.currentSiteType));
-  frame = (frame + 1) % frames.length;
+  const stage    = pet.stage   || 'egg';
+  const petType  = pet.petType || 'rabbit';
+  const sprites  = getSprites(stage, petType);
+  drawSprite(sprites[frame % sprites.length], buildPalette(stage, petType));
+  frame = (frame + 1) % sprites.length;
 }
 
 // ─── UI update ────────────────────────────────────────────────────────────────
+
+const PET_NAMES = { rabbit:'BUNNY', cat:'KITTY', dog:'BUDDY', parrot:'POLY' };
+
 const STAGE_LABELS = {
   egg:    '● EGG ●',
   baby:   '● BABY ●',
@@ -250,20 +274,22 @@ function updateUI(data) {
   if (!data) return;
   pet = data;
 
+  document.getElementById('petName').textContent =
+    PET_NAMES[pet.petType] || 'PIXEL';
+
   document.getElementById('stageBadge').textContent =
     STAGE_LABELS[pet.stage] || STAGE_LABELS.egg;
 
-  document.getElementById('deadOverlay').classList.toggle(
-    'visible', !!pet.isDead
-  );
+  document.getElementById('deadOverlay').classList.toggle('visible', !!pet.isDead);
 
   document.getElementById('mood').textContent =
     MOOD_LABELS[pet.currentSiteType] || MOOD_LABELS.neutral;
 
-  const h = Math.round(pet.health || 0);
-  const hp = Math.round(pet.happiness || 0);
+  container.style.boxShadow = GLOW[pet.isDead ? 'dead' : (pet.currentSiteType || 'neutral')] || 'none';
 
-  document.getElementById('healthBar').style.width = h + '%';
+  const h  = Math.round(pet.health    || 0);
+  const hp = Math.round(pet.happiness || 0);
+  document.getElementById('healthBar').style.width = h  + '%';
   document.getElementById('happyBar').style.width  = hp + '%';
   document.getElementById('healthVal').textContent = h;
   document.getElementById('happyVal').textContent  = hp;
@@ -273,8 +299,16 @@ function updateUI(data) {
 }
 
 // ─── Init ─────────────────────────────────────────────────────────────────────
+
 async function init() {
   const data = await chrome.storage.local.get('pet');
+
+  if (!data.pet) {
+    // No pet yet — onboarding hasn't been completed
+    document.getElementById('stageBadge').textContent = 'open the tab to choose your pet';
+    return;
+  }
+
   updateUI(data.pet);
   tick();
   setInterval(tick, 900);

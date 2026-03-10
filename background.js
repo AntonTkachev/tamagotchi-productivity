@@ -4,8 +4,13 @@ importScripts('petLogic.js');
 
 chrome.runtime.onInstalled.addListener(async () => {
   const existing = await chrome.storage.local.get(['pet', 'settings']);
-  if (!existing.pet)      await chrome.storage.local.set({ pet: createDefaultPet() });
-  if (!existing.settings) await chrome.storage.local.set({ settings: DEFAULT_SETTINGS });
+  if (!existing.settings) {
+    await chrome.storage.local.set({ settings: DEFAULT_SETTINGS });
+  }
+  if (!existing.pet) {
+    // First launch — open pet selection screen
+    chrome.tabs.create({ url: chrome.runtime.getURL('onboarding.html') });
+  }
   chrome.alarms.create('tick', { periodInMinutes: 5 });
 });
 
@@ -41,7 +46,7 @@ async function tick() {
 chrome.runtime.onMessage.addListener((message) => {
   if (message.type === 'SITE_VISIT') {
     chrome.storage.local.set({
-      currentSite:    message.hostname,
+      currentSite:   message.hostname,
       siteTimestamp: Date.now(),
     });
   }
