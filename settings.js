@@ -144,51 +144,58 @@ document.getElementById('resetPetBtn').addEventListener('click', resetPet);
 
 // ─── Change companion ──────────────────────────────────────────────────────────
 
-function initChangeCompanion(pet, usedCount) {
-  const usesLeft   = MAX_FREE_CHANGES - usedCount;
-  const exhausted  = usesLeft <= 0;
+let selectedCompanion = null;
+
+function renderChangeCompanion(pet, usedCount) {
+  const left       = MAX_FREE_CHANGES - usedCount;
+  const exhausted  = left <= 0;
   const meta       = document.getElementById('changeMeta');
   const confirmBtn = document.getElementById('confirmChangeBtn');
   const proHint    = document.getElementById('proHint');
+  const currentType = pet && pet.petType;
+
+  // Reset selection state
+  selectedCompanion = null;
+  confirmBtn.classList.remove('visible');
 
   meta.innerHTML = exhausted
     ? `<span class="uses-none">0 changes remaining</span>`
-    : `<span class="uses-left">${usesLeft}</span> free change${usesLeft !== 1 ? 's' : ''} remaining`;
+    : `<span class="uses-left">${left}</span> free change${left !== 1 ? 's' : ''} remaining`;
 
-  if (exhausted) {
-    proHint.classList.add('visible');
-  }
+  proHint.classList.toggle('visible', exhausted);
 
-  // Mark current pet type
-  const currentType = pet && pet.petType;
   document.querySelectorAll('.companion-card').forEach(card => {
+    card.classList.remove('selected');
     card.classList.toggle('current', card.dataset.type === currentType);
+    card.dataset.exhausted = exhausted ? '1' : '';
   });
+}
 
-  let selectedType = null;
+function initChangeCompanion(pet, usedCount) {
+  renderChangeCompanion(pet, usedCount);
 
   document.querySelectorAll('.companion-card').forEach(card => {
     card.addEventListener('click', () => {
-      if (exhausted || card.dataset.type === currentType) return;
+      const exhausted   = card.dataset.exhausted === '1';
+      const currentType = card.classList.contains('current');
+      if (exhausted || currentType) return;
+
       document.querySelectorAll('.companion-card').forEach(c => c.classList.remove('selected'));
       card.classList.add('selected');
-      selectedType = card.dataset.type;
-      confirmBtn.classList.add('visible');
+      selectedCompanion = card.dataset.type;
+      document.getElementById('confirmChangeBtn').classList.add('visible');
     });
   });
 
-  confirmBtn.addEventListener('click', async () => {
-    if (!selectedType || exhausted) return;
+  document.getElementById('confirmChangeBtn').addEventListener('click', async () => {
+    if (!selectedCompanion) return;
     const data = await chrome.storage.local.get(['pet', 'petChangesUsed']);
     if (!data.pet) return;
-    const updated = { ...data.pet, petType: selectedType };
-    await chrome.storage.local.set({
-      pet: updated,
-      petChangesUsed: (data.petChangesUsed || 0) + 1,
-    });
+    const newUsed = (data.petChangesUsed || 0) + 1;
+    const updated = { ...data.pet, petType: selectedCompanion };
+    await chrome.storage.local.set({ pet: updated, petChangesUsed: newUsed });
     renderPetInfo(updated);
-    // Refresh the section to reflect new state
-    initChangeCompanion(updated, (data.petChangesUsed || 0) + 1);
+    renderChangeCompanion(updated, newUsed);
   });
 }
 
