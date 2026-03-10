@@ -16,10 +16,11 @@ let settings = { productive: [], distracting: [] };
 const MAX_FREE_CHANGES = 3;
 
 async function load() {
-  const data = await chrome.storage.local.get(['settings', 'pet', 'petChangesUsed', 'devMode']);
+  const data = await chrome.storage.local.get(['settings', 'pet', 'petChangesUsed', 'siteTimeToday', 'devMode']);
   settings = data.settings || DEFAULT_SETTINGS;
   render('productive');
   render('distracting');
+  renderTimeToday(data.siteTimeToday || {});
   renderPetInfo(data.pet);
   initChangeCompanion(data.pet, data.petChangesUsed || 0);
   if (typeof DEV_MODE !== 'undefined' && DEV_MODE) initDevPanel(data.pet);
@@ -33,6 +34,35 @@ function render(type) {
     li.className = 'site-item';
     li.innerHTML = `<span>${site}</span><button data-type="${type}" data-site="${site}">✕</button>`;
     list.appendChild(li);
+  });
+}
+
+function renderTimeToday(siteTimeToday) {
+  const container = document.getElementById('timeList');
+  container.innerHTML = '';
+
+  const entries = Object.entries(siteTimeToday)
+    .sort((a, b) => b[1] - a[1])
+    .slice(0, 10);
+
+  if (entries.length === 0) {
+    container.innerHTML = '<div class="time-empty">no data yet today</div>';
+    return;
+  }
+
+  entries.forEach(([site, minutes]) => {
+    const type = (settings.productive  || []).some(s => site.includes(s)) ? 'productive'
+               : (settings.distracting || []).some(s => site.includes(s)) ? 'distracting'
+               : 'neutral';
+
+    const hours = Math.floor(minutes / 60);
+    const mins  = minutes % 60;
+    const label = hours > 0 ? `${hours}h ${mins}m` : `${mins}m`;
+
+    const div = document.createElement('div');
+    div.className = `time-item ${type}`;
+    div.innerHTML = `<span class="site-label">${site}</span><span class="time-val">${label}</span>`;
+    container.appendChild(div);
   });
 }
 

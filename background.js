@@ -25,8 +25,9 @@ chrome.alarms.onAlarm.addListener(async (alarm) => {
 });
 
 async function tick() {
+  const now  = Date.now();
   const data = await chrome.storage.local.get(
-    ['pet', 'settings', 'currentSite', 'siteTimestamp']
+    ['pet', 'settings', 'currentSite', 'siteTimestamp', 'siteTimeToday', 'siteTimeDate']
   );
   if (!data.pet) return;
 
@@ -35,10 +36,22 @@ async function tick() {
     data.settings || DEFAULT_SETTINGS,
     data.currentSite,
     data.siteTimestamp,
-    Date.now()
+    now
   );
 
-  await chrome.storage.local.set({ pet });
+  // ── Track time per site ──────────────────────────────────────────────────
+  const today        = new Date(now).toDateString();
+  const siteTimeDate = data.siteTimeDate || today;
+  const siteTimeToday = siteTimeDate === today ? (data.siteTimeToday || {}) : {};
+
+  const siteIsRecent = data.currentSite &&
+    (now - (data.siteTimestamp || 0)) < 10 * 60 * 1000;
+
+  if (siteIsRecent) {
+    siteTimeToday[data.currentSite] = (siteTimeToday[data.currentSite] || 0) + 5;
+  }
+
+  await chrome.storage.local.set({ pet, siteTimeToday, siteTimeDate: today });
 }
 
 // ─── Site tracking ────────────────────────────────────────────────────────────
