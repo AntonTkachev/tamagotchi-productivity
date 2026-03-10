@@ -15,7 +15,9 @@ chrome.runtime.onInstalled.addListener(async () => {
 });
 
 chrome.runtime.onStartup.addListener(() => {
-  chrome.alarms.create('tick', { periodInMinutes: 5 });
+  chrome.alarms.get('tick', alarm => {
+    if (!alarm) chrome.alarms.create('tick', { periodInMinutes: 5 });
+  });
 });
 
 // ─── Tick ─────────────────────────────────────────────────────────────────────

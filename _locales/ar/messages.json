@@ -23,6 +23,7 @@
   "info_min_today": { "message": "د اليوم" },
   "info_streak":    { "message": "السلسلة:" },
   "info_best":      { "message": "الرقم القياسي:" },
+  "time_empty":     { "message": "لا توجد بيانات اليوم" },
 
   "dead_title": { "message": "💀 مات حيوانك الأليف" },
   "dead_hint":  { "message": "زر موقعًا منتجًا لإحيائه" },

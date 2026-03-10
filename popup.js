@@ -240,7 +240,7 @@ function drawSprite(rows, palette) {
 let pet   = null;
 let frame = 0;
 
-function tick() {
+function animateTick() {
   if (!pet) return;
   const stage    = pet.stage   || 'egg';
   const petType  = pet.petType || 'rabbit';
@@ -303,8 +303,8 @@ async function init() {
   }
 
   updateUI(data.pet);
-  tick();
-  setInterval(tick, 900);
+  animateTick();
+  setInterval(animateTick, 900);
   setInterval(async () => {
     const fresh = await chrome.storage.local.get('pet');
     updateUI(fresh.pet);

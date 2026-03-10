@@ -124,6 +124,61 @@ describe('tick alarm', () => {
     const after = await chrome.storage.local.get(['pet']);
     expect(after.pet).toEqual(before.pet);
   });
+
+  // ─── siteTimeToday tracking ───────────────────────────────────────────────
+
+  test('accumulates time for active site on tick', async () => {
+    const now = Date.now();
+    const pet = { ...petLogic.createDefaultPet(), petType: 'rabbit', lastUpdated: now - 5 * MIN };
+    await chrome.storage.local.set({
+      pet,
+      currentSite:    'github.com',
+      siteTimestamp:  now - 1 * MIN,
+      siteTimeToday:  { 'github.com': 10 },
+      siteTimeDate:   new Date(now).toDateString(),
+    });
+
+    await alarmListener({ name: 'tick' });
+
+    const result = await chrome.storage.local.get(['siteTimeToday']);
+    expect(result.siteTimeToday['github.com']).toBe(15); // 10 + 5
+  });
+
+  test('resets siteTimeToday on a new day', async () => {
+    const now       = Date.now();
+    const yesterday = new Date(now - 24 * 60 * 60 * 1000).toDateString();
+    const pet = { ...petLogic.createDefaultPet(), petType: 'rabbit', lastUpdated: now - 5 * MIN };
+    await chrome.storage.local.set({
+      pet,
+      currentSite:   'github.com',
+      siteTimestamp: now - 1 * MIN,
+      siteTimeToday: { 'notion.so': 120 },
+      siteTimeDate:  yesterday,
+    });
+
+    await alarmListener({ name: 'tick' });
+
+    const result = await chrome.storage.local.get(['siteTimeToday', 'siteTimeDate']);
+    expect(result.siteTimeToday['notion.so']).toBeUndefined(); // cleared
+    expect(result.siteTimeToday['github.com']).toBe(5);        // fresh entry
+    expect(result.siteTimeDate).toBe(new Date(now).toDateString());
+  });
+
+  test('does not track time when site timestamp is stale', async () => {
+    const now = Date.now();
+    const pet = { ...petLogic.createDefaultPet(), petType: 'rabbit', lastUpdated: now - 5 * MIN };
+    await chrome.storage.local.set({
+      pet,
+      currentSite:   'github.com',
+      siteTimestamp: now - 15 * MIN, // stale — older than 10 min
+      siteTimeToday: {},
+    });
+
+    await alarmListener({ name: 'tick' });
+
+    const result = await chrome.storage.local.get(['siteTimeToday']);
+    expect(result.siteTimeToday['github.com']).toBeUndefined();
+  });
 });
 
 // ─── onMessage (SITE_VISIT) ───────────────────────────────────────────────────

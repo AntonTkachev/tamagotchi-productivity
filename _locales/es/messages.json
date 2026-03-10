@@ -23,6 +23,7 @@
   "info_min_today": { "message": "min hoy" },
   "info_streak":    { "message": "Racha:" },
   "info_best":      { "message": "Récord:" },
+  "time_empty":     { "message": "sin datos por hoy" },
 
   "dead_title": { "message": "💀 tu mascota murió" },
   "dead_hint":  { "message": "visita un sitio productivo para revivirla" },

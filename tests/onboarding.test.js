@@ -67,6 +67,45 @@ describe('onboarding pet creation', () => {
     expect(pet.streak).toBe(0);
     expect(pet.bestStreak).toBe(0);
   });
+});
+
+// ─── resetPet logic ───────────────────────────────────────────────────────────
+// Mirrors settings.js resetPet() — uses createDefaultPet() + preserves petType
+
+function resetPetFrom(existingPet) {
+  const base = createPetFromOnboarding(existingPet.petType || 'rabbit');
+  return { ...base, bornAt: Date.now(), lastUpdated: Date.now() };
+}
+
+describe('resetPet preserves petType', () => {
+  test.each(['rabbit', 'cat', 'dog', 'parrot'])(
+    'reset %s pet keeps petType',
+    (petType) => {
+      const existing = createPetFromOnboarding(petType);
+      const reset    = resetPetFrom(existing);
+      expect(reset.petType).toBe(petType);
+    }
+  );
+
+  test('reset pet starts back at egg with full health', () => {
+    const existing = { ...createPetFromOnboarding('cat'), age: 30, health: 10, stage: 'teen' };
+    const reset    = resetPetFrom(existing);
+    expect(reset.stage).toBe('egg');
+    expect(reset.health).toBe(80);
+    expect(reset.age).toBe(0);
+  });
+
+  test('reset pet resets streak to 0', () => {
+    const existing = { ...createPetFromOnboarding('dog'), streak: 14, bestStreak: 14 };
+    const reset    = resetPetFrom(existing);
+    expect(reset.streak).toBe(0);
+    expect(reset.bestStreak).toBe(0);
+  });
+
+  test('reset without existing pet falls back to rabbit', () => {
+    const reset = resetPetFrom({});
+    expect(reset.petType).toBe('rabbit');
+  });
 
   test('currentSiteType is neutral on creation', () => {
     const pet = createPetFromOnboarding('parrot');

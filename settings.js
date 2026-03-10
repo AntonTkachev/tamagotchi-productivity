@@ -1,15 +1,5 @@
-const DEFAULT_SETTINGS = {
-  productive: [
-    'github.com', 'stackoverflow.com', 'notion.so', 'figma.com',
-    'docs.google.com', 'linear.app', 'jira.atlassian.com',
-    'gitlab.com', 'codepen.io', 'leetcode.com', 'developer.mozilla.org',
-  ],
-  distracting: [
-    'youtube.com', 'twitter.com', 'x.com', 'reddit.com',
-    'instagram.com', 'facebook.com', 'tiktok.com', 'netflix.com',
-    'twitch.tv',
-  ],
-};
+// DEFAULT_SETTINGS lives in petLogic.js (single source of truth).
+// petLogic.js is loaded before this script via <script> in settings.html.
 
 let settings = { productive: [], distracting: [] };
 
@@ -17,7 +7,7 @@ const MAX_FREE_CHANGES = 3;
 
 async function load() {
   const data = await chrome.storage.local.get(['settings', 'pet', 'petChangesUsed', 'siteTimeToday', 'devMode']);
-  settings = data.settings || DEFAULT_SETTINGS;
+  settings = data.settings || DEFAULT_SETTINGS; // DEFAULT_SETTINGS from petLogic.js
   render('productive');
   render('distracting');
   renderTimeToday(data.siteTimeToday || {});
@@ -30,9 +20,16 @@ function render(type) {
   const list = document.getElementById(`${type}List`);
   list.innerHTML = '';
   (settings[type] || []).forEach(site => {
-    const li = document.createElement('li');
+    const li  = document.createElement('li');
     li.className = 'site-item';
-    li.innerHTML = `<span>${site}</span><button data-type="${type}" data-site="${site}">✕</button>`;
+    const span = document.createElement('span');
+    span.textContent = site;
+    const btn = document.createElement('button');
+    btn.dataset.type = type;
+    btn.dataset.site = site;
+    btn.textContent  = '✕';
+    li.appendChild(span);
+    li.appendChild(btn);
     list.appendChild(li);
   });
 }
@@ -46,7 +43,10 @@ function renderTimeToday(siteTimeToday) {
     .slice(0, 10);
 
   if (entries.length === 0) {
-    container.innerHTML = '<div class="time-empty">no data yet today</div>';
+    const empty = document.createElement('div');
+    empty.className  = 'time-empty';
+    empty.textContent = chrome.i18n.getMessage('time_empty') || 'no data yet today';
+    container.appendChild(empty);
     return;
   }
 
@@ -59,9 +59,16 @@ function renderTimeToday(siteTimeToday) {
     const mins  = minutes % 60;
     const label = hours > 0 ? `${hours}h ${mins}m` : `${mins}m`;
 
-    const div = document.createElement('div');
-    div.className = `time-item ${type}`;
-    div.innerHTML = `<span class="site-label">${site}</span><span class="time-val">${label}</span>`;
+    const div      = document.createElement('div');
+    div.className  = `time-item ${type}`;
+    const siteLbl  = document.createElement('span');
+    siteLbl.className   = 'site-label';
+    siteLbl.textContent = site;
+    const timeLbl  = document.createElement('span');
+    timeLbl.className   = 'time-val';
+    timeLbl.textContent = label;
+    div.appendChild(siteLbl);
+    div.appendChild(timeLbl);
     container.appendChild(div);
   });
 }
@@ -81,7 +88,7 @@ function renderPetInfo(pet) {
 }
 
 function cleanHostname(raw) {
-  return raw.trim().toLowerCase()
+  return (raw || '').trim().toLowerCase()
     .replace(/^https?:\/\//i, '')
     .replace(/\/.*$/, '');
 }
@@ -108,17 +115,10 @@ async function save() {
 
 async function resetPet() {
   if (!confirm(chrome.i18n.getMessage('confirm_reset_msg') || 'Reset your pet? It will start over as a fresh egg.')) return;
-  const newPet = {
-    health: 80,
-    happiness: 80,
-    age: 0,
-    stage: 'egg',
-    bornAt: Date.now(),
-    lastUpdated: Date.now(),
-    focusMinutesToday: 0,
-    lastFocusDate: new Date().toDateString(),
-    isDead: false,
-    currentSiteType: 'neutral',
+  const data    = await chrome.storage.local.get('pet');
+  const newPet  = {
+    ...createDefaultPet(), // createDefaultPet() is from petLogic.js
+    petType: (data.pet && data.pet.petType) || 'rabbit',
   };
   await chrome.storage.local.set({ pet: newPet });
   renderPetInfo(newPet);

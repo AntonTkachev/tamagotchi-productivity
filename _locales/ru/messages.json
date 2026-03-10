@@ -23,6 +23,7 @@
   "info_min_today": { "message": "мин сегодня" },
   "info_streak":    { "message": "Стрик:" },
   "info_best":      { "message": "Рекорд:" },
+  "time_empty":     { "message": "данных пока нет" },
 
   "dead_title": { "message": "💀 питомец умер" },
   "dead_hint":  { "message": "открой продуктивный сайт чтобы воскресить" },
